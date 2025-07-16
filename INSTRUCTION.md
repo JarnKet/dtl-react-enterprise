@@ -22,9 +22,10 @@ This project is a Back office of CRM
 - Routing: Tanstack Router
 
 - Data Fetcher: Axios
+- Server State Management: React Query
+
 - Form: Formik, React Hook Form
 - Client State Management: Zustand
-- Server State Management: React Query
 - Testing: Jest, React Testing Library
 - Validation: Zod / Yup
 - Custom Hooks: mantine / use hooks

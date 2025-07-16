@@ -1,10 +1,18 @@
 "use client"
 
 import * as React from "react"
+
+// Third Party
+import {Link} from "@tanstack/react-router"
+
+// Icons
 import {
     AudioWaveform,
     BookOpen,
     Bot,
+    Briefcase,
+    ChevronRight,
+    Cog,
     Command,
     Frame,
     GalleryVerticalEnd,
@@ -14,11 +22,26 @@ import {
     SquareTerminal,
 } from "lucide-react"
 
-import {NavMain} from "@/components/nav-main"
-import {NavProjects} from "@/components/nav-projects"
+
+// UI
 import {NavUser} from "@/components/nav-user"
 import {TeamSwitcher} from "@/components/team-switcher"
-import {Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail,} from "@/components/ui/sidebar"
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarGroup,
+    SidebarGroupLabel,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarMenuSub,
+    SidebarMenuSubButton,
+    SidebarMenuSubItem,
+    SidebarRail,
+} from "@/components/ui/sidebar"
+import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/components/ui/collapsible.tsx";
 
 // This is sample data.
 const data = {
@@ -150,6 +173,54 @@ const data = {
     ],
 }
 
+
+const menus = [
+    {
+        label: "General",
+        items: [
+            {
+                title: "Dashboard",
+                url: "/dashboard",
+                icon: SquareTerminal,
+            },
+            {
+                title: "Remote Jobs",
+                url: "/remote-job",
+                icon: Briefcase,
+            }
+
+        ]
+    },
+    {
+        label: "Settings",
+        items: [
+            {
+                title: "System",
+                url: "",
+                icon: Cog,
+                subItems: [
+                    {
+                        title: "General",
+                        url: "#",
+                    },
+                    {
+                        title: "Team",
+                        url: "#",
+                    },
+                    {
+                        title: "Billing",
+                        url: "#",
+                    },
+                    {
+                        title: "Limits",
+                        url: "#",
+                    }
+                ]
+            }
+        ]
+    }
+]
+
 export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
     return (
         <Sidebar collapsible="icon" {...props}>
@@ -157,8 +228,57 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
                 <TeamSwitcher teams={data.teams}/>
             </SidebarHeader>
             <SidebarContent>
-                <NavMain items={data.navMain}/>
-                <NavProjects projects={data.projects}/>
+
+                {menus.map((item) => {
+                        const isSubMenu = item.items.some((i) => i?.subItems && i?.subItems.length > 0)
+
+                        return <SidebarGroup>
+                            <SidebarMenu>
+
+                                <SidebarGroupLabel>{item.label}</SidebarGroupLabel>
+
+                                {isSubMenu ? item.items.map((i) => (
+                                    <Collapsible>
+                                        <SidebarMenuItem>
+                                            <CollapsibleTrigger asChild>
+                                                <SidebarMenuButton tooltip={i.title}>
+                                                    {i.icon && <i.icon/>}
+                                                    <span>{i.title}</span>
+                                                    <ChevronRight
+                                                        className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"/>
+                                                </SidebarMenuButton>
+                                            </CollapsibleTrigger>
+                                            <CollapsibleContent>
+                                                <SidebarMenuSub>
+                                                    {i?.subItems.map((s) => (
+                                                        <SidebarMenuSubItem key={s.title}>
+                                                            <SidebarMenuSubButton asChild>
+                                                                <Link to={s.url}>
+                                                                    <span>{s.title}</span>
+                                                                </Link>
+                                                            </SidebarMenuSubButton>
+                                                        </SidebarMenuSubItem>
+                                                    ))}
+                                                </SidebarMenuSub>
+                                            </CollapsibleContent>
+                                        </SidebarMenuItem>
+                                    </Collapsible>
+                                )) : item.items.map((i, index) => (
+
+                                        <SidebarMenuItem key={i.title}>
+                                            <SidebarMenuButton asChild>
+                                                <Link to={i.url}>
+                                                    {i.icon && <i.icon/>}
+                                                    <span>{i.title}</span>
+                                                </Link>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    )
+                                )}
+                            </SidebarMenu>
+                        </SidebarGroup>
+                    }
+                )}
             </SidebarContent>
             <SidebarFooter>
                 <NavUser user={data.user}/>
