@@ -20,13 +20,14 @@ This project is a Back office of CRM
 - CSS Framework: Tailwind CSS
 - UI: Shadcn
 - Routing: Tanstack Router
-
 - Data Fetcher: Axios
 - Server State Management: React Query
+- Client State Management: Zustand
+- Custom Hooks: mantine / use hooks
 
 - Form: Formik, React Hook Form
-- Client State Management: Zustand
-- Testing: Jest, React Testing Library
 - Validation: Zod / Yup
-- Custom Hooks: mantine / use hooks
 - Text Editor: ....
+
+
+- Testing: Jest, React Testing Library

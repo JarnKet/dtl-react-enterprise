@@ -15,6 +15,7 @@ import { Route as AboutIndexRouteImport } from './routes/about/index'
 import { Route as PrivateSettingIndexRouteImport } from './routes/_private/setting/index'
 import { Route as PrivateRemoteJobIndexRouteImport } from './routes/_private/remote-job/index'
 import { Route as PrivateDashboardIndexRouteImport } from './routes/_private/dashboard/index'
+import { Route as PrivateRemoteJobIdRouteImport } from './routes/_private/remote-job/$id'
 
 const PrivateRoute = PrivateRouteImport.update({
   id: '/_private',
@@ -45,10 +46,16 @@ const PrivateDashboardIndexRoute = PrivateDashboardIndexRouteImport.update({
   path: '/dashboard/',
   getParentRoute: () => PrivateRoute,
 } as any)
+const PrivateRemoteJobIdRoute = PrivateRemoteJobIdRouteImport.update({
+  id: '/remote-job/$id',
+  path: '/remote-job/$id',
+  getParentRoute: () => PrivateRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutIndexRoute
+  '/remote-job/$id': typeof PrivateRemoteJobIdRoute
   '/dashboard': typeof PrivateDashboardIndexRoute
   '/remote-job': typeof PrivateRemoteJobIndexRoute
   '/setting': typeof PrivateSettingIndexRoute
@@ -56,6 +63,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutIndexRoute
+  '/remote-job/$id': typeof PrivateRemoteJobIdRoute
   '/dashboard': typeof PrivateDashboardIndexRoute
   '/remote-job': typeof PrivateRemoteJobIndexRoute
   '/setting': typeof PrivateSettingIndexRoute
@@ -65,20 +73,34 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_private': typeof PrivateRouteWithChildren
   '/about/': typeof AboutIndexRoute
+  '/_private/remote-job/$id': typeof PrivateRemoteJobIdRoute
   '/_private/dashboard/': typeof PrivateDashboardIndexRoute
   '/_private/remote-job/': typeof PrivateRemoteJobIndexRoute
   '/_private/setting/': typeof PrivateSettingIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/dashboard' | '/remote-job' | '/setting'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/remote-job/$id'
+    | '/dashboard'
+    | '/remote-job'
+    | '/setting'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/dashboard' | '/remote-job' | '/setting'
+  to:
+    | '/'
+    | '/about'
+    | '/remote-job/$id'
+    | '/dashboard'
+    | '/remote-job'
+    | '/setting'
   id:
     | '__root__'
     | '/'
     | '/_private'
     | '/about/'
+    | '/_private/remote-job/$id'
     | '/_private/dashboard/'
     | '/_private/remote-job/'
     | '/_private/setting/'
@@ -134,16 +156,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateDashboardIndexRouteImport
       parentRoute: typeof PrivateRoute
     }
+    '/_private/remote-job/$id': {
+      id: '/_private/remote-job/$id'
+      path: '/remote-job/$id'
+      fullPath: '/remote-job/$id'
+      preLoaderRoute: typeof PrivateRemoteJobIdRouteImport
+      parentRoute: typeof PrivateRoute
+    }
   }
 }
 
 interface PrivateRouteChildren {
+  PrivateRemoteJobIdRoute: typeof PrivateRemoteJobIdRoute
   PrivateDashboardIndexRoute: typeof PrivateDashboardIndexRoute
   PrivateRemoteJobIndexRoute: typeof PrivateRemoteJobIndexRoute
   PrivateSettingIndexRoute: typeof PrivateSettingIndexRoute
 }
 
 const PrivateRouteChildren: PrivateRouteChildren = {
+  PrivateRemoteJobIdRoute: PrivateRemoteJobIdRoute,
   PrivateDashboardIndexRoute: PrivateDashboardIndexRoute,
   PrivateRemoteJobIndexRoute: PrivateRemoteJobIndexRoute,
   PrivateSettingIndexRoute: PrivateSettingIndexRoute,
