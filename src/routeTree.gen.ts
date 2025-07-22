@@ -14,8 +14,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
 import { Route as PrivateSettingIndexRouteImport } from './routes/_private/setting/index'
 import { Route as PrivateRemoteJobIndexRouteImport } from './routes/_private/remote-job/index'
+import { Route as PrivateProductIndexRouteImport } from './routes/_private/product/index'
 import { Route as PrivateDashboardIndexRouteImport } from './routes/_private/dashboard/index'
 import { Route as PrivateRemoteJobIdRouteImport } from './routes/_private/remote-job/$id'
+import { Route as PrivateProductMutateRouteImport } from './routes/_private/product/mutate'
+import { Route as PrivateProductIdRouteImport } from './routes/_private/product/$id'
 
 const PrivateRoute = PrivateRouteImport.update({
   id: '/_private',
@@ -41,6 +44,11 @@ const PrivateRemoteJobIndexRoute = PrivateRemoteJobIndexRouteImport.update({
   path: '/remote-job/',
   getParentRoute: () => PrivateRoute,
 } as any)
+const PrivateProductIndexRoute = PrivateProductIndexRouteImport.update({
+  id: '/product/',
+  path: '/product/',
+  getParentRoute: () => PrivateRoute,
+} as any)
 const PrivateDashboardIndexRoute = PrivateDashboardIndexRouteImport.update({
   id: '/dashboard/',
   path: '/dashboard/',
@@ -51,20 +59,36 @@ const PrivateRemoteJobIdRoute = PrivateRemoteJobIdRouteImport.update({
   path: '/remote-job/$id',
   getParentRoute: () => PrivateRoute,
 } as any)
+const PrivateProductMutateRoute = PrivateProductMutateRouteImport.update({
+  id: '/product/mutate',
+  path: '/product/mutate',
+  getParentRoute: () => PrivateRoute,
+} as any)
+const PrivateProductIdRoute = PrivateProductIdRouteImport.update({
+  id: '/product/$id',
+  path: '/product/$id',
+  getParentRoute: () => PrivateRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutIndexRoute
+  '/product/$id': typeof PrivateProductIdRoute
+  '/product/mutate': typeof PrivateProductMutateRoute
   '/remote-job/$id': typeof PrivateRemoteJobIdRoute
   '/dashboard': typeof PrivateDashboardIndexRoute
+  '/product': typeof PrivateProductIndexRoute
   '/remote-job': typeof PrivateRemoteJobIndexRoute
   '/setting': typeof PrivateSettingIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutIndexRoute
+  '/product/$id': typeof PrivateProductIdRoute
+  '/product/mutate': typeof PrivateProductMutateRoute
   '/remote-job/$id': typeof PrivateRemoteJobIdRoute
   '/dashboard': typeof PrivateDashboardIndexRoute
+  '/product': typeof PrivateProductIndexRoute
   '/remote-job': typeof PrivateRemoteJobIndexRoute
   '/setting': typeof PrivateSettingIndexRoute
 }
@@ -73,8 +97,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_private': typeof PrivateRouteWithChildren
   '/about/': typeof AboutIndexRoute
+  '/_private/product/$id': typeof PrivateProductIdRoute
+  '/_private/product/mutate': typeof PrivateProductMutateRoute
   '/_private/remote-job/$id': typeof PrivateRemoteJobIdRoute
   '/_private/dashboard/': typeof PrivateDashboardIndexRoute
+  '/_private/product/': typeof PrivateProductIndexRoute
   '/_private/remote-job/': typeof PrivateRemoteJobIndexRoute
   '/_private/setting/': typeof PrivateSettingIndexRoute
 }
@@ -83,16 +110,22 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/product/$id'
+    | '/product/mutate'
     | '/remote-job/$id'
     | '/dashboard'
+    | '/product'
     | '/remote-job'
     | '/setting'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/product/$id'
+    | '/product/mutate'
     | '/remote-job/$id'
     | '/dashboard'
+    | '/product'
     | '/remote-job'
     | '/setting'
   id:
@@ -100,8 +133,11 @@ export interface FileRouteTypes {
     | '/'
     | '/_private'
     | '/about/'
+    | '/_private/product/$id'
+    | '/_private/product/mutate'
     | '/_private/remote-job/$id'
     | '/_private/dashboard/'
+    | '/_private/product/'
     | '/_private/remote-job/'
     | '/_private/setting/'
   fileRoutesById: FileRoutesById
@@ -149,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateRemoteJobIndexRouteImport
       parentRoute: typeof PrivateRoute
     }
+    '/_private/product/': {
+      id: '/_private/product/'
+      path: '/product'
+      fullPath: '/product'
+      preLoaderRoute: typeof PrivateProductIndexRouteImport
+      parentRoute: typeof PrivateRoute
+    }
     '/_private/dashboard/': {
       id: '/_private/dashboard/'
       path: '/dashboard'
@@ -163,19 +206,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateRemoteJobIdRouteImport
       parentRoute: typeof PrivateRoute
     }
+    '/_private/product/mutate': {
+      id: '/_private/product/mutate'
+      path: '/product/mutate'
+      fullPath: '/product/mutate'
+      preLoaderRoute: typeof PrivateProductMutateRouteImport
+      parentRoute: typeof PrivateRoute
+    }
+    '/_private/product/$id': {
+      id: '/_private/product/$id'
+      path: '/product/$id'
+      fullPath: '/product/$id'
+      preLoaderRoute: typeof PrivateProductIdRouteImport
+      parentRoute: typeof PrivateRoute
+    }
   }
 }
 
 interface PrivateRouteChildren {
+  PrivateProductIdRoute: typeof PrivateProductIdRoute
+  PrivateProductMutateRoute: typeof PrivateProductMutateRoute
   PrivateRemoteJobIdRoute: typeof PrivateRemoteJobIdRoute
   PrivateDashboardIndexRoute: typeof PrivateDashboardIndexRoute
+  PrivateProductIndexRoute: typeof PrivateProductIndexRoute
   PrivateRemoteJobIndexRoute: typeof PrivateRemoteJobIndexRoute
   PrivateSettingIndexRoute: typeof PrivateSettingIndexRoute
 }
 
 const PrivateRouteChildren: PrivateRouteChildren = {
+  PrivateProductIdRoute: PrivateProductIdRoute,
+  PrivateProductMutateRoute: PrivateProductMutateRoute,
   PrivateRemoteJobIdRoute: PrivateRemoteJobIdRoute,
   PrivateDashboardIndexRoute: PrivateDashboardIndexRoute,
+  PrivateProductIndexRoute: PrivateProductIndexRoute,
   PrivateRemoteJobIndexRoute: PrivateRemoteJobIndexRoute,
   PrivateSettingIndexRoute: PrivateSettingIndexRoute,
 }
